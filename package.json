@@ -1,5 +1,5 @@
 {
-  "name": "adorable-avatars",
+  "name": "@fuelrats/koa-adorable-avatars",
   "version": "0.2.2-alpha.0",
   "description": "",
   "engines": {
@@ -22,8 +22,8 @@
     "dist"
   ],
   "dependencies": {
+    "@koa/router": "^9.4.0",
     "avatars-utils": "0.0.4",
-    "express": "^4.17.1",
     "sharp": "^0.26.2",
     "uuid": "^8.3.1"
   },
@@ -33,13 +33,14 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.8",
+    "@types/koa": "^2.11.5",
+    "@types/koa__router": "^8.0.3",
     "@types/mocha": "^8.0.3",
     "@types/node": "^14.11.8",
     "@types/serve-favicon": "^2.5.0",
     "@types/sharp": "^0.26.0",
     "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
-    "@typescript-eslint/eslint-plugin-tslint": "^4.4.1",
     "@typescript-eslint/parser": "^4.4.1",
     "chai": "^4.2.0",
     "concurrently": "^5.3.0",

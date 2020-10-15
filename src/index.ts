@@ -1,4 +1,4 @@
-import router from './router';
+import AvatarRoutes from './router';
 
-export default router;
-(module as any).exports = router;
+export default AvatarRoutes;
+(module as any).exports = AvatarRoutes;

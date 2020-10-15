@@ -26,7 +26,7 @@ export class FaceFactory {
     this.mouthHash = new Hash(mouths, hashFactory(sumAndDiff));
   }
 
-  public create(string): Face {
+  public create(string: string): Face {
     return {
       color: this.colorHash.get(string),
       eyes: this.eyeHash.get(string),

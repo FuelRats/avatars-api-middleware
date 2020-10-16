@@ -1,9 +1,9 @@
 {
   "name": "@fuelrats/koa-adorable-avatars",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Adorable avatars middleware for koa.js",
   "engines": {
-    "node": "^14.0.0"
+    "node": ">=10.16.0"
   },
   "scripts": {
     "test": "mocha --exit",

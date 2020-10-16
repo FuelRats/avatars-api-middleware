@@ -1,27 +1,33 @@
-# adorable-avatars
-[![Build Status](https://travis-ci.org/adorableio/avatars-api-middleware.svg)](https://travis-ci.org/adorableio/avatars-api-middleware)
+# koa-adorable-avatars
 
 ## What is it?
-This repository contains the [express middleware](https://expressjs.com/en/guide/using-middleware.html#middleware.router) that can be used to host your own avatars service!
-
-Check out [our website](http://avatars.adorable.io/) for more info on (and an interactive demo of) what this service does.
+This repository contains the [Koa middleware](https://koajs.com/#application) that can be used to host your own avatars service!
 
 ## How do I use it?
-First, you'll need the `adorable-avatars` package:
+First, you'll need the `@fuelrats/koa-adorable-avatars` package:
 
 ```bash
-npm install adorable-avatars --save
+npm install @fuelrats/koa-adorable-avatars --save
+```
+or
+```bash
+yarn add @fuelrats/koa-adorable-avatars
 ```
 
-Then, use the router middleware within your application:
+Then, use the routers within your application:
 
 ```js
 // your_server.js
-import express from 'express';
-import avatarsMiddleware from 'adorable-avatars';
+import Koa from 'koa';
+import Router from '@koa/router';
+import AvatarsRouter from 'adorable-avatars';
 
-const myApp = express();
-myApp.use('/myAvatars', avatarsMiddleware);
+const router = new Router()
+router.use('/avatars', router.routes(), router.allowedMethods());
+
+const app = new Koa();
+app.use(router.routes());
+app.use(router.allowedMethods());
 ```
 
 That's it! Your server now includes the avatars endpoints!
@@ -29,21 +35,21 @@ That's it! Your server now includes the avatars endpoints!
 ### Endpoints
 Assuming your server lives at `myserver.com`, and you've configured the middleware as above, you now have the following endpoints:
 
-* `myserver.com/myAvatars/:id`
+* `myserver.com/avatars/:id`
     * returns an avatar for the provided `id`.
     * `id` can be anything (email, username, md5 hash, as long as it's a valid URI)
     * defaults to 400px
-* `myserver.com/myAvatars/:size/:id`
+* `myserver.com/avatars/:size/:id`
     * returns an avatar for the provided `id` at the specified `size`
     * size cannot exceed 400px
-* `myserver.com/myAvatars/face/:eyes/:nose/:mouth/:color/:size?`
+* `myserver.com/avatars/face/:eyes/:nose/:mouth/:color/:size?`
     * Allows you to generate a custom avatar from the specified parts and color, and size
-    * e.g. `myserver.com/myAvatars/face/eyes1/nose2/mouth4/DEADBF/300`
-* `myserver.com/myAvatars/list`
+    * e.g. `myserver.com/avatars/face/eyes1/nose2/mouth4/DEADBF/300`
+* `myserver.com/avatars/list`
     * returns JSON of all valid parts for the custom endpoint above
-  * `myserver.com/myAvatars/:size?/random`
+  * `myserver.com/avatars/:size?/random`
       * returns a random avatar, different each time
-      * e.g. `myserver.com/myAvatars/300/random`
+      * e.g. `myserver.com/avatars/300/random`
 
 
 ## Development

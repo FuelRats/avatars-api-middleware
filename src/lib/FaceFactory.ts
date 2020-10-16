@@ -6,6 +6,7 @@ export interface Face {
   eyes: string;
   nose: string;
   mouth: string;
+  size: string;
 }
 
 export class FaceFactory {
@@ -26,12 +27,13 @@ export class FaceFactory {
     this.mouthHash = new Hash(mouths, hashFactory(sumAndDiff));
   }
 
-  public create(string: string): Face {
+  public create(seed: string, size: string): Face {
     return {
-      color: this.colorHash.get(string),
-      eyes: this.eyeHash.get(string),
-      nose: this.noseHash.get(string),
-      mouth: this.mouthHash.get(string),
+      color: this.colorHash.get(seed),
+      eyes: this.eyeHash.get(seed),
+      nose: this.noseHash.get(seed),
+      mouth: this.mouthHash.get(seed),
+      size,
     };
   }
 }

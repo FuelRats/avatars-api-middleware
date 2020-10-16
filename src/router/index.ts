@@ -1,21 +1,17 @@
 import { Context } from 'koa';
 import Router from '@koa/router';
-import uuid from 'uuid';
+import UUID from 'pure-uuid';
 
 import { imageFileNames, imageFilePaths } from '../lib/imageFiles';
-import { combine, resize } from '../lib/imaging';
+import { render } from '../lib/imaging';
 import FaceFactory, { Face } from '../lib/FaceFactory';
 
+
+
+
+
 const imageTypes: (keyof Face)[] = ['eyes', 'nose', 'mouth'];
-
 const router = new Router();
-
-
-const pngResponse = (ctx: Context) => {
-  ctx.res.setHeader('Expires', new Date(Date.now() + 604800000).toUTCString());
-  ctx.type = 'image/png';
-  return ctx.data;
-};
 
 router.get('/list', (ctx: Context) => {
   const face = {};
@@ -25,33 +21,32 @@ router.get('/list', (ctx: Context) => {
   ctx.body = JSON.stringify({ face });
 });
 
-router.get('/:size?/random', (ctx: Context) => {
-  const { size } = ctx.query;
-  const face = FaceFactory.create(uuid.v4());
+router.get('/:size?/random', async (ctx: Context) => {
+  const { size } = ctx.params;
+  const face = FaceFactory.create((new UUID(4)).toString(), size);
 
-  ctx.body = combine(face)
-    .png()
-    .pipe(resize(size))
-    .pipe(pngResponse(ctx));
-
+  ctx.res.setHeader('Expires', new Date(Date.now() + 604800000).toUTCString());
+  ctx.type = 'image/png';
+  ctx.body = await render(face);
 });
 
-router.get('/:size?/:id', (ctx: Context) => {
-  const { id, size } = ctx.query;
-  const face = FaceFactory.create(id);
+router.get('/:size?/:id', async (ctx: Context) => {
+  const { id, size } = ctx.params;
+  const face = FaceFactory.create(id, size);
 
-  ctx.body = combine(face)
-    .png()
-    .pipe(resize(size))
-    .pipe(pngResponse(ctx));
+  ctx.res.setHeader('Expires', new Date(Date.now() + 604800000).toUTCString());
+  ctx.type = 'image/png';
+  ctx.body = await render(face);
 });
 
-router.get('/face/:eyes/:nose/:mouth/:color/:size?', (ctx: Context) => {
-  const { color, size } = ctx.query;
-  const face = { color: `#${color}` } as Face;
+
+
+router.get('/face/:eyes/:nose/:mouth/:color/:size?', async (ctx: Context) => {
+  const { color, size } = ctx.params;
+  const face = { color: `#${color}`, size } as Face;
 
   imageTypes.forEach(type => {
-    const requestedName = ctx.query[type];
+    const requestedName = ctx.params[type];
     const paths = imageFilePaths(type);
     face[type] = paths.find(path => !!path.match(requestedName)) || paths[0];
 
@@ -60,10 +55,9 @@ router.get('/face/:eyes/:nose/:mouth/:color/:size?', (ctx: Context) => {
     }
   });
 
-  combine(face)
-    .png()
-    .pipe(resize(size))
-    .pipe(pngResponse(ctx));
+  ctx.res.setHeader('Expires', new Date(Date.now() + 604800000).toUTCString());
+  ctx.type = 'image/png';
+  ctx.body = await render(face);
 });
 
 export default router;

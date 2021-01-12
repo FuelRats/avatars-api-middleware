@@ -7,12 +7,13 @@
   },
   "scripts": {
     "test": "mocha --exit",
-    "build": "tsc && npm run build:assets",
     "build:assets": "cp -r src/img dist/img",
-    "dev": "concurrently --kill-others --prefix=name --names=server,tslint --prefix-colors=green,magenta \"npm run dev:server\" \"npm run dev:lint\"",
-    "dev:server": "onchange -i -k 'src/**/*.ts' -- ts-node test/server.ts",
+    "build": "tsc && $npm_execpath run build:assets",
     "dev:lint": "onchange -i -k 'src/**/*.ts' -- eslint 'src/**/*.ts'",
-    "prepublishOnly": "npm run build"
+    "dev:server": "onchange -i -k 'src/**/*.ts' -- ts-node test/server.ts",
+    "dev": "concurrently --kill-others --prefix=name --names=server,tslint --prefix-colors=green,magenta \"$npm_execpath run dev:server\" \"$npm_execpath run dev:lint\"",
+    "prepack": "$npm_execpath run build",
+    "prepublish": "$npm_execpath run test"
   },
   "author": "",
   "license": "MIT",
@@ -33,7 +34,6 @@
   },
   "devDependencies": {
     "@types/chai": "^4.2.14",
-    "@types/express": "^4.17.10",
     "@types/koa": "^2.11.6",
     "@types/koa__router": "^8.0.3",
     "@types/mocha": "^8.2.0",
@@ -52,8 +52,6 @@
     "koa": "^2.13.1",
     "mocha": "^8.2.1",
     "onchange": "^7.1.0",
-    "prettier": "^2.2.1",
-    "serve-favicon": "^2.5.0",
     "supertest": "^6.0.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"

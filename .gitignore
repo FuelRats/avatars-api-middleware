@@ -1,3 +1,16 @@
-node_modules/
-.env
+# Build Dirs
 dist/
+
+# Sensitive Files
+.env*
+
+
+# Package Manager Files
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+node_modules/
+package-lock.json

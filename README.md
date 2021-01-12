@@ -23,7 +23,7 @@ import Router from '@koa/router';
 import AvatarsRouter from 'adorable-avatars';
 
 const router = new Router()
-router.use('/avatars', router.routes(), router.allowedMethods());
+router.use('/avatars', AvatarsRouter.routes(), AvatarsRouter.allowedMethods());
 
 const app = new Koa();
 app.use(router.routes());

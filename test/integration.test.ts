@@ -3,6 +3,8 @@ import { expect } from 'chai';
 import server from './server';
 import sharp = require('sharp');
 
+const request = supertest.agent(server);
+
 describe('middleware', () => {
   let metaReader: sharp.Sharp;
 
@@ -12,14 +14,14 @@ describe('middleware', () => {
 
   describe('v2 avatar request', () => {
     it('responds with an image', done => {
-      supertest(server)
+      request
         .get('/avatars/abott')
         .expect('Content-Type', /image/)
         .end(done);
     });
 
     it('can resize an image', done => {
-      supertest(server)
+      request
         .get('/avatars/220/abott')
         .pipe(metaReader);
 
@@ -34,7 +36,7 @@ describe('middleware', () => {
     });
 
     it('can manually compose an image', done => {
-      supertest(server)
+      request
         .get('/avatars/face/eyes1/nose4/mouth11/bbb')
         .expect(200)
         .expect('Content-Type', /image/)
@@ -42,7 +44,7 @@ describe('middleware', () => {
     });
 
     it('can manually compose an image with a custom size', done => {
-      supertest(server)
+      request
         .get('/avatars/face/eyes1/nose4/mouth11/bbb/50')
         .expect(200)
         .expect('Content-Type', /image/)
@@ -61,14 +63,14 @@ describe('middleware', () => {
 
   describe('v2 avatar list requests', () => {
     it('responds with json', done => {
-      supertest(server)
+      request
         .get('/avatars/list')
         .expect('Content-Type', /json/)
         .end(done);
     });
 
     it('responds with a list of possible face parts', done => {
-      supertest(server)
+      request
         .get('/avatars/list')
         .end((err, res) => {
           const faceParts = res.body.face;
@@ -81,7 +83,7 @@ describe('middleware', () => {
   describe('v2 avatar random requests', () => {
     it('can randomly generate a new avatar', done => {
       const getRandom = () =>
-        supertest(server)
+        request
           .get('/avatars/random')
           .expect(200)
           .expect('Content-Type', /image/);
@@ -99,7 +101,7 @@ describe('middleware', () => {
     });
 
     it('supports a custom size parameter', done => {
-      supertest(server)
+      request
         .get('/avatars/50/random')
         .expect(200)
         .expect('Content-Type', /image/)

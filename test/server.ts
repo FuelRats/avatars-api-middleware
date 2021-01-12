@@ -12,8 +12,8 @@ router.use('/avatars', avatarsRouter.routes(), avatarsRouter.allowedMethods());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.listen(port, () =>
+const server = app.listen(port, () =>
   console.log(`[Adorable Avatars] Running at: http://localhost:${port}`),
 );
 
-export default app;
+export default server;

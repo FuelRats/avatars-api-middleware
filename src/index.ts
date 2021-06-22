@@ -1,4 +1,2 @@
-import AvatarRoutes from './router';
-
-export default AvatarRoutes;
-(module as any).exports = AvatarRoutes;
+export { default } from './avatarsRouter';
+export * from './avatarsRouter';

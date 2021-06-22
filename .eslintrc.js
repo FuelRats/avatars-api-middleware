@@ -24,7 +24,6 @@ module.exports = {
         sourceType: 'module',
     },
     plugins: [
-        'eslint-plugin-prefer-arrow',
         'eslint-plugin-import',
         'eslint-plugin-jsdoc',
         '@typescript-eslint',
@@ -205,7 +204,6 @@ module.exports = {
             'error',
             'never',
         ],
-        'prefer-arrow/prefer-arrow-functions': 'error',
         'prefer-const': 'error',
         'prefer-object-spread': 'error',
         'quote-props': [

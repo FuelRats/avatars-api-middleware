@@ -5,24 +5,28 @@ import sharp = require('sharp');
 
 const request = supertest.agent(server);
 
-describe('middleware', () => {
+const webpContentType = /image\/webp/;
+const jpegContentType = /image\/jpeg/;
+const jsonContentType = /application\/json/;
+
+describe('avatar routes', () => {
   let metaReader: sharp.Sharp;
 
   beforeEach(() => {
     metaReader = sharp();
   });
 
-  describe('v2 avatar request', () => {
-    it('responds with an image', done => {
+  describe('next avatar requests', () => {
+    it('can generate an avatar', done => {
       request
-        .get('/avatars/abott')
-        .expect('Content-Type', /image/)
+        .get('/api/abott')
+        .expect('Content-Type', webpContentType)
         .end(done);
     });
 
-    it('can resize an image', done => {
+    it('supports a custom size parameter', done => {
       request
-        .get('/avatars/220/abott')
+        .get('/api/abott/220')
         .pipe(metaReader);
 
       metaReader
@@ -35,19 +39,29 @@ describe('middleware', () => {
         .catch(done);
     });
 
-    it('can manually compose an image', done => {
+    it('supports a custom format parameter', done => {
       request
-        .get('/avatars/face/eyes1/nose4/mouth11/bbb')
+        .get('/api/abott/220/jpg')
         .expect(200)
-        .expect('Content-Type', /image/)
+        .expect('Content-Type', jpegContentType)
+        .end(done);
+    });
+  });
+
+  describe('next avatar manual requests', () => {
+    it('can generate a manually composed avatar', done => {
+      request
+        .get('/api/face/eyes1/nose4/mouth11/bbb')
+        .expect(200)
+        .expect('Content-Type', webpContentType)
         .end(done);
     });
 
-    it('can manually compose an image with a custom size', done => {
+    it('supports a custom size parameter', done => {
       request
-        .get('/avatars/face/eyes1/nose4/mouth11/bbb/50')
+        .get('/api/face/eyes1/nose4/mouth11/bbb/50')
         .expect(200)
-        .expect('Content-Type', /image/)
+        .expect('Content-Type', webpContentType)
         .pipe(metaReader);
 
       metaReader
@@ -59,34 +73,23 @@ describe('middleware', () => {
         })
         .catch(done);
     });
-  });
 
-  describe('v2 avatar list requests', () => {
-    it('responds with json', done => {
+    it('supports a custom format parameter', done => {
       request
-        .get('/avatars/list')
-        .expect('Content-Type', /json/)
-        .end(done);
-    });
-
-    it('responds with a list of possible face parts', done => {
-      request
-        .get('/avatars/list')
-        .end((err, res) => {
-          const faceParts = res.body.face;
-          expect(faceParts).to.have.keys('eyes', 'mouth', 'nose');
-          done();
-        });
+      .get('/api/face/eyes1/nose4/mouth11/bbb/50/jpeg')
+      .expect(200)
+      .expect('Content-Type', jpegContentType)
+      .end(done);
     });
   });
 
-  describe('v2 avatar random requests', () => {
-    it('can randomly generate a new avatar', done => {
+  describe('next avatar random requests', () => {
+    it('can generate a random avatar', done => {
       const getRandom = () =>
         request
-          .get('/avatars/random')
+          .get('/api/random')
           .expect(200)
-          .expect('Content-Type', /image/);
+          .expect('Content-Type', webpContentType);
       const metaReader2 = sharp();
 
       getRandom().pipe(metaReader);
@@ -102,9 +105,9 @@ describe('middleware', () => {
 
     it('supports a custom size parameter', done => {
       request
-        .get('/avatars/50/random')
+        .get('/api/random/50')
         .expect(200)
-        .expect('Content-Type', /image/)
+        .expect('Content-Type', webpContentType)
         .pipe(metaReader);
 
       metaReader
@@ -115,6 +118,33 @@ describe('middleware', () => {
           done();
         })
         .catch(done);
+    });
+
+    it('supports a custom format parameter', done => {
+      request
+        .get('/api/random/50/jpeg')
+        .expect(200)
+        .expect('Content-Type', jpegContentType)
+        .end(done);
+    });
+  });
+
+  describe('next avatar list requests', () => {
+    it('responds with json', done => {
+      request
+        .get('/api/list')
+        .expect('Content-Type', jsonContentType)
+        .end(done);
+    });
+
+    it('responds with a list of possible face parts', done => {
+      request
+        .get('/api/list')
+        .end((err, res) => {
+          const faceParts = res.body.face;
+          expect(faceParts).to.have.keys('eyes', 'mouth', 'nose');
+          done();
+        });
     });
   });
 });

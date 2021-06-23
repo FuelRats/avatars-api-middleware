@@ -1,6 +1,6 @@
 {
   "name": "@fuelrats/next-adorable-avatars",
-  "version": "0.1.2",
+  "version": "0.1.0",
   "description": "Adorable avatar API routes for Next.js",
   "engines": {
     "node": "^14.15.0 | >=16.0"
@@ -11,7 +11,7 @@
     "build": "tsc && $npm_execpath run build:assets",
     "dev:lint": "onchange -i -k 'src/**/*.ts' -- eslint 'src/**/*.ts'",
     "dev:server": "onchange -i -k 'src/**/*.ts' -- ts-node test/server.ts",
-    "dev": "concurrently --kill-others --prefix=name --names=server,tslint --prefix-colors=green,magenta \"$npm_execpath run dev:server\" \"$npm_execpath run dev:lint\"",
+    "dev": "concurrently --kill-others --prefix=name --names=server,eslint --prefix-colors=green,magenta \"$npm_execpath run dev:server\" \"$npm_execpath run dev:lint\"",
     "prepack": "$npm_execpath run build",
     "prepublish": "$npm_execpath run test"
   },

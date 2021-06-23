@@ -1,33 +1,33 @@
-# koa-adorable-avatars
+# @fuelrats/next-adorable-avatars
 
 ## What is it?
-This repository contains the [Koa middleware](https://koajs.com/#application) that can be used to host your own avatars service!
+This repository contains the [Next.js][] API Routes that can be used to host your own avatars service!
+
+## Prerequisites
+
+- [Next.js][] version `>=v9.5.0`
+
 
 ## How do I use it?
-First, you'll need the `@fuelrats/koa-adorable-avatars` package:
+First, you'll need the `@fuelrats/next-adorable-avatars` package:
 
 ```bash
-npm install @fuelrats/koa-adorable-avatars --save
+npm install @fuelrats/next-adorable-avatars --save
 ```
 or
 ```bash
-yarn add @fuelrats/koa-adorable-avatars
+yarn add @fuelrats/next-adorable-avatars
 ```
 
-Then, use the routers within your application:
+Then, create a file named `[[...slug]].js`
+
+**IMPORTANT:** While the router may be mounted under _any_ api route, the file **MUST** be named `[[...slug]].js` for the router to properly map route parameters.
 
 ```js
-// your_server.js
-import Koa from 'koa';
-import Router from '@koa/router';
-import AvatarsRouter from 'adorable-avatars';
+// /pages/api/avatars/[[...slug]].js
+import avatarsRouter from '@fuelrats/next-adorable-avatars';
 
-const router = new Router()
-router.use('/avatars', AvatarsRouter.routes(), AvatarsRouter.allowedMethods());
-
-const app = new Koa();
-app.use(router.routes());
-app.use(router.allowedMethods());
+export default avatarsRouter
 ```
 
 That's it! Your server now includes the avatars endpoints!
@@ -35,22 +35,41 @@ That's it! Your server now includes the avatars endpoints!
 ### Endpoints
 Assuming your server lives at `myserver.com`, and you've configured the middleware as above, you now have the following endpoints:
 
-* `myserver.com/avatars/:id`
+* `myserver.com/api/avatars/:id`
     * returns an avatar for the provided `id`.
     * `id` can be anything (email, username, md5 hash, as long as it's a valid URI)
-    * defaults to 400px
-* `myserver.com/avatars/:size/:id`
+    * size defaults to `400x400px`
+* `myserver.com/api/avatars/:id/:size`
     * returns an avatar for the provided `id` at the specified `size`
-    * size cannot exceed 400px
-* `myserver.com/avatars/face/:eyes/:nose/:mouth/:color/:size?`
+    * `size` must be `>=32 && <=512`
+* `myserver.com/api/avatars/:id/:size/:format`
+    * returns an avatar for the provided `id` at the specified `size` and `format`
+    * See below for supported formats
+* `myserver.com/api/avatars/random/:size?/:format?`
+    * returns a random avatar, different each time
+    * Optionally accepts size and format options like the endpoints above.
+    * e.g. `myserver.com/avatars/random/300`
+* `myserver.com/api/avatars/face/:eyes/:nose/:mouth/:color/:size?/:format?`
     * Allows you to generate a custom avatar from the specified parts and color, and size
-    * e.g. `myserver.com/avatars/face/eyes1/nose2/mouth4/DEADBF/300`
-* `myserver.com/avatars/list`
+    * Optionally accepts size and format options like the endpoints above.
+    * e.g. `myserver.com/api/avatars/face/eyes1/nose2/mouth4/DEADBF/300/jpeg`
+* `myserver.com/api/avatars/list`
     * returns JSON of all valid parts for the custom endpoint above
-  * `myserver.com/avatars/:size?/random`
-      * returns a random avatar, different each time
-      * e.g. `myserver.com/avatars/300/random`
 
+
+## Supported Output Formats
+
+| Format   | Parameter      |              |
+|----------|:--------------:|:------------:|
+| **webp** | **`webp`**     | **Default**  |
+| avif     | `avif`         |              |
+| gif      | `gif`          |              |
+| heif     | `heic`, `heif` |              |
+| jpeg     | `jpg`, `jpeg`  |              |
+| png      | `png`          |              |
+| tiff     | `tiff`         |              |
+
+**NOTE:** While `TIFF`, `AVIF`, and `HEIF` are all supported by the renderer, browser support for these formats is limited or non-existant.
 
 ## Development
 If you're developing locally, you'll first need to bootstrap (assumes [nvm](https://github.com/creationix/nvm)):
@@ -89,3 +108,9 @@ Please read the [contributors' guide](CONTRIBUTING.md)
 ## Open-source Contributors
 
 * [missingdink](https://twitter.com/missingdink): Illustrated the very first avatars! [Check them out!](http://api.adorable.io/avatar/hi_mom)
+
+
+
+
+
+[Next.js]: https://nextjs.org

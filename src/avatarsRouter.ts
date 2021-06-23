@@ -17,11 +17,15 @@ const resolveQueryParam = (param: string | string[]): string =>
     : param;
 
 const validFormats = new Map([
+  ['avif', 'image/avif'],
+  ['gif', 'image/gif'],
+  ['heic', 'image/heic'],
+  ['heif', 'image/heic'],
   ['jpeg', 'image/jpeg'],
   ['jpg', 'image/jpeg'],
   ['png', 'image/png'],
+  ['tiff', 'image/tiff'],
   ['webp', 'image/webp'],
-  ['gif', 'image/gif'],
 ]);
 
 const sendRenderedFace = async (req: NextApiRequest, res: NextApiResponse, face: Face): Promise<void> => {

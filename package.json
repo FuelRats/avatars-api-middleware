@@ -24,7 +24,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "github:FuelRats/avatars-api-middleware#nextjs"
+    "url": "https://github.com/FuelRats/avatars-api-middleware.git"
   },
   "dependencies": {
     "avatars-utils": "0.0.4",

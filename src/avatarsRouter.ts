@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import nc, { NextHandler } from 'next-connect';
 import UUID from 'pure-uuid';
+import workerpool from 'workerpool';
 
 import { imageFileNames, imageFilePaths } from './lib/imageFiles';
-import { renderToBuffer } from './lib/imaging';
 import FaceFactory, { Face } from './lib/FaceFactory';
 
 
@@ -28,6 +28,8 @@ const validFormats = new Map([
   ['webp', 'image/webp'],
 ]);
 
+const imageFormatPool = workerpool.pool(require.resolve(`${__dirname}/lib/imaging.js`));
+
 const sendRenderedFace = async (req: NextApiRequest, res: NextApiResponse, face: Face): Promise<void> => {
   const format = resolveQueryParam(req.query?.format ?? 'webp').toLowerCase();
 
@@ -37,7 +39,7 @@ const sendRenderedFace = async (req: NextApiRequest, res: NextApiResponse, face:
     return;
   }
 
-  const renderedFace = await renderToBuffer(face, format);
+  const renderedFace = Buffer.from(await imageFormatPool.exec('renderToBuffer', [face, format]));
   res.setHeader('Expires', new Date(Date.now() + 604800000).toUTCString());
   res.setHeader('Content-Type', contentType);
   res.status(200).end(renderedFace);

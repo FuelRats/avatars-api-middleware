@@ -18,7 +18,7 @@ const renderToBuffer = (face: Face, format: string): Promise<Buffer> =>
     .composite([{ input: face.mouth }, { input: face.nose }])
     .flatten({ background: face.color })
     .pipe(resize(face.size))
-    .toFormat(format as keyof FormatEnum, { quality: 90 })
+    .toFormat(format as keyof FormatEnum, { quality: 80 })
     .toBuffer();
 
 

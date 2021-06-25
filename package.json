@@ -1,6 +1,6 @@
 {
   "name": "@fuelrats/next-adorable-avatars",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Adorable avatar API routes for Next.js",
   "engines": {
     "node": "^14.15.0 | >=16.0"
@@ -30,7 +30,8 @@
     "avatars-utils": "0.0.4",
     "next-connect": "^0.10.1",
     "pure-uuid": "^1.6.2",
-    "sharp": "^0.28.3"
+    "sharp": "^0.28.3",
+    "workerpool": "^6.1.5"
   },
   "devDependencies": {
     "@types/chai": "^4.2.19",
@@ -42,6 +43,7 @@
     "@types/serve-favicon": "^2.5.2",
     "@types/sharp": "^0.28.3",
     "@types/supertest": "^2.0.11",
+    "@types/workerpool": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "chai": "^4.3.4",

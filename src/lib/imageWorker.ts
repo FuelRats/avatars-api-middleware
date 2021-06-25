@@ -8,17 +8,12 @@ const maxSize = 512;
 
 const parseSize = parseSizeFactory(minSize, maxSize);
 
-const resize = (rawSize: string): sharp.Sharp => {
-  const size = parseSize(rawSize);
-  return sharp().resize(size.width, size.height);
-};
-
-const renderToBuffer = (face: Face, format: string): Promise<Buffer> =>
+const renderToBuffer = (face: Face): Promise<Buffer> =>
   sharp(face.eyes)
     .composite([{ input: face.mouth }, { input: face.nose }])
     .flatten({ background: face.color })
-    .pipe(resize(face.size))
-    .toFormat(format as keyof FormatEnum, { quality: 80 })
+    .resize(parseSize(face.size))
+    .toFormat(face.format as keyof FormatEnum, { quality: 80 })
     .toBuffer();
 
 

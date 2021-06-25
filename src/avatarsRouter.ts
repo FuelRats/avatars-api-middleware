@@ -28,7 +28,7 @@ const validFormats = new Map([
   ['webp', 'image/webp'],
 ]);
 
-const imageFormatPool = workerpool.pool(require.resolve(`${__dirname}/lib/imaging.js`));
+const imageFormatPool = workerpool.pool(require.resolve(`${__dirname}/lib/imageWorker.js`));
 
 const sendRenderedFace = async (req: NextApiRequest, res: NextApiResponse, face: Face): Promise<void> => {
   const format = resolveQueryParam(req.query?.format ?? 'webp').toLowerCase();

@@ -6,10 +6,12 @@
     "node": "^14.15.0 | >=16.0"
   },
   "scripts": {
-    "test": "mocha --exit",
+    "lint": "eslint 'src/**/*.ts'",
+    "test:mocha": "mocha --exit",
+    "test": "$npm_execpath run build && $npm_execpath run test:mocha && $npm_execpath run lint",
     "build:assets": "cp -r src/img dist/img",
-    "build": "tsc && $npm_execpath run build:assets",
-    "dev:lint": "onchange -i -k 'src/**/*.ts' -- eslint 'src/**/*.ts'",
+    "build": "rm -rf dist && tsc && $npm_execpath run build:assets",
+    "dev:lint": "onchange -i -k 'src/**/*.ts' -- $npm_execpath run lint",
     "dev:server": "onchange -i -k 'src/**/*.ts' -- ts-node test/server.ts",
     "dev": "concurrently --kill-others --prefix=name --names=server,eslint --prefix-colors=green,magenta \"$npm_execpath run dev:server\" \"$npm_execpath run dev:lint\"",
     "prepack": "$npm_execpath run build",

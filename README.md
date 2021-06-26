@@ -36,15 +36,15 @@ export default avatarsRouter
 ### Endpoints
 Assuming your server lives at `myserver.com`, and you've configured the middleware as above, you now have the following endpoints:
 
-* `myserver.com/api/avatars/:id`
-    * returns an avatar for the provided `id`.
-    * `id` can be anything (email, username, md5 hash, as long as it's a valid URI)
-    * size defaults to `400x400px`
-* `myserver.com/api/avatars/:id/:size`
-    * returns an avatar for the provided `id` at the specified `size`
+* `myserver.com/api/avatars/:seed`
+    * returns an avatar for the provided `seed`.
+    * `seed` can be anything (email, username, md5 hash, as long as it's a valid URI)
+    * size defaults to `512x512px`
+* `myserver.com/api/avatars/:seed/:size`
+    * returns an avatar for the provided `seed` at the specified `size`
     * `size` must be `>=32 && <=512`
-* `myserver.com/api/avatars/:id/:size/:format`
-    * returns an avatar for the provided `id` at the specified `size` and `format`
+* `myserver.com/api/avatars/:seed/:size/:format`
+    * returns an avatar for the provided `seed` at the specified `size` and `format`
     * See below for supported formats
 * `myserver.com/api/avatars/random/:size?/:format?`
     * returns a random avatar, different each time

@@ -1,7 +1,7 @@
 import http, { IncomingMessage, ServerResponse } from 'http';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getCookieParser, parseBody, redirect, sendData, sendJson, sendStatusCode, setLazyProp } from 'next/dist/next-server/server/api-utils';
-import avatarsRouter from '../src';
+import avatarsRouter from '../dist';
 
 const port = Number(process.env.PORT) || 3002;
 

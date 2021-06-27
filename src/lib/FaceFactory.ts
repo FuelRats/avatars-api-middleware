@@ -10,19 +10,31 @@ export interface Face {
   mouth: string;
   size: string;
   format: string;
+  id: string;
 }
-export type FaceConstructor = {
+
+export interface GenerateParams {
+  seed?: string | string[];
+  size?: string | string[];
+  format?: string | string[];
+}
+
+export type DefineParams = {
   [K in keyof Face]?: string | string[];
 };
 
-export const faceParts: (keyof FaceConstructor)[] = ['eyes', 'nose', 'mouth'];
+
+export const faceParts: (keyof DefineParams)[] = ['eyes', 'nose', 'mouth'];
 
 export class FaceFactory {
+  public defaultFormat = 'webp';
+  public defaultSize = '512'; // Intentionally string.
+
   private colorHash: Hash<string>;
   private eyesHash: Hash<string>;
   private noseHash: Hash<string>;
   private mouthHash: Hash<string>;
-  private seed?: string;
+  private seedVal?: string;
 
   constructor(
     colors: string[],
@@ -36,39 +48,48 @@ export class FaceFactory {
     this.mouthHash = new Hash(mouths, hashFactory(sumAndDiff));
   }
 
-  public generate(seed: string, size: string, format: string): Face {
-    return {
+  public generate(params: GenerateParams): Face {
+    this.seedVal = undefined;
+
+    const seed = resolveQueryParam(params.seed) ?? this.seed;
+
+    const face = {
       color: this.colorHash.get(seed),
       eyes: this.eyesHash.get(seed),
       nose: this.noseHash.get(seed),
       mouth: this.mouthHash.get(seed),
-      size,
-      format,
-    };
+      size: resolveQueryParam(params.size) ?? this.defaultSize,
+      format: resolveQueryParam(params.format) ?? this.defaultFormat,
+    } as Face;
+
+    face.id = Object.values(face).join('.');
+
+    return face;
   }
 
-  public define(query: FaceConstructor): Face {
-    this.seed = null;
+  public define(params: DefineParams): Face {
+    this.seedVal = undefined;
 
     const face = {
-      color: this.getColor(resolveQueryParam(query.color)),
-      size: resolveQueryParam(query.size, '512'),
-      format: resolveQueryParam(query.format, 'webp'),
+      color: this.getColor(resolveQueryParam(params.color)),
+      size: resolveQueryParam(params.size) ?? this.defaultSize,
+      format: resolveQueryParam(params.format) ?? this.defaultFormat,
     } as Face;
 
     faceParts.forEach(type => {
       face[type] = this.getFacePart(
         type,
-        resolveQueryParam(query[type], '*'),
+        resolveQueryParam(params[type]) ?? '*',
       );
     });
+
+    face.id = Object.values(face).join('.');
 
     return face;
   }
 
   private getColor(color: string) {
     if (!color || color === '*') {
-      this.seed ??= (new UUID(4)).toString();
       return this.colorHash.get(this.seed);
     }
 
@@ -83,12 +104,16 @@ export class FaceFactory {
         return '';
 
       case '*':
-        this.seed ??= (new UUID(4)).toString();
         return this[`${type}Hash`].get(this.seed);
 
       default:
         return paths.find(path => Boolean(path.match(name))) ?? paths[0];
     }
+  }
+
+  private get seed () {
+    this.seedVal ??= (new UUID(4)).toString();
+    return this.seedVal;
   }
 }
 

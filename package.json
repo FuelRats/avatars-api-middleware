@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint 'src/**/*.ts'",
     "test:mocha": "mocha --exit",
-    "test": "$npm_execpath run build && $npm_execpath run test:mocha && $npm_execpath run lint",
+    "test": "$npm_execpath run test:mocha && $npm_execpath run lint",
     "build:assets": "cp -r src/img dist/img",
     "build": "rm -rf dist && tsc && $npm_execpath run build:assets",
     "dev:lint": "onchange -i -k 'src/**/*.ts' -- $npm_execpath run lint",

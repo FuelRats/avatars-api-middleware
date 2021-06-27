@@ -2,6 +2,10 @@
 
 This repository contains the [Next.js][] API Routes that can be used to host your own avatars service!
 
+## ⚠️ In Development Warning ⚠️
+
+This package is still in early development, and it's API is not yet stable. Until a `v1.0` release, consider all minor semver releases (v0.x) to be **BREAKING**.
+
 ## Prerequisites
 
 - [Next.js][] version `>=v9.5.0`

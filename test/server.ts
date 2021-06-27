@@ -1,6 +1,14 @@
 import http, { IncomingMessage, ServerResponse } from 'http';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { getCookieParser, parseBody, redirect, sendData, sendJson, sendStatusCode, setLazyProp } from 'next/dist/next-server/server/api-utils';
+import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import {
+  getCookieParser,
+  parseBody,
+  redirect,
+  sendData,
+  sendJson,
+  sendStatusCode,
+  setLazyProp,
+} from 'next/dist/next-server/server/api-utils';
 import avatarsRouter from '../dist';
 
 const port = Number(process.env.PORT) || 3002;
@@ -13,7 +21,7 @@ const port = Number(process.env.PORT) || 3002;
  * - Assumes all requests are served by `/pages/api/[[...slug]].js`
  * - Env, preview, previewData, setPreviewData, and clearPreviewData are never defined.
  */
-const nextApiAdapter = (router: (req: NextApiRequest, res: NextApiResponse) => Promise<void>) =>
+const nextApiAdapter = (router: NextApiHandler) =>
   async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     const apiReq = req as NextApiRequest;
     const apiRes = res as NextApiResponse;

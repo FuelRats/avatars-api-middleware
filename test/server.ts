@@ -41,6 +41,9 @@ const nextApiAdapter = (router: NextApiHandler) =>
     return router(apiReq, apiRes);
   };
 
+
+const routerInstance = avatarsRouter();
+
 export default http
-  .createServer(nextApiAdapter(avatarsRouter))
+  .createServer(nextApiAdapter(routerInstance))
   .listen(port);

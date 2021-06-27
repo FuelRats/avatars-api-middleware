@@ -28,7 +28,7 @@ yarn add @fuelrats/next-adorable-avatars
 // /pages/api/avatars/[...slug].js
 import avatarsRouter from '@fuelrats/next-adorable-avatars';
 
-export default avatarsRouter
+export default avatarsRouter()
 ```
 
 5. That's it! Your server will now serve the avatar endpoints!

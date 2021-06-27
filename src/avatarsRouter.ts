@@ -66,16 +66,20 @@ const sendRandomFace: NCApiHandler = async (req, res, next) => {
 
 
 
-const router = nc<NextApiRequest, NextApiResponse>({ attachParams: true });
-router.use(nextParamAdapter);
-router.get('/list', sendFaceList);
-router.get('/random/:size?/:format?', sendRandomFace);
-router.get('/:seed/:size?/:format?', sendSeededFace);
-router.get('/face/:eyes/:nose/:mouth/:color/:size?/:format?', sendDefinedFace);
 
-const avatarsRouter: NextApiHandler = (req, res) => {
-  req.url = ['', ...req.query.slug].join('/'); // Removes base API path so the router can be mounted anywhere.
-  return router(req, res);
+
+const avatarsRouter = (): NextApiHandler =>  {
+  const router = nc<NextApiRequest, NextApiResponse>({ attachParams: true });
+  router.use(nextParamAdapter);
+  router.get('/list', sendFaceList);
+  router.get('/random/:size?/:format?', sendRandomFace);
+  router.get('/:seed/:size?/:format?', sendSeededFace);
+  router.get('/face/:eyes/:nose/:mouth/:color/:size?/:format?', sendDefinedFace);
+
+  return (req, res) => {
+    req.url = ['', ...req.query.slug].join('/'); // Removes base API path so the router can be mounted anywhere.
+    return router(req, res);
+  };
 };
 
 export default avatarsRouter;
